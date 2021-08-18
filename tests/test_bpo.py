@@ -189,7 +189,7 @@ async def test_no_body_when_edit_title(monkeypatch):
     gh = FakeGH()
     await bpo.router.dispatch(event, gh, session=None)
     assert gh.patch_data is not None
-    assert gh.patch_data["body"] == "\n\n<!-- issue-number: bpo-32636 -->\nhttps://bugs.python.org/issue32636\n<!-- /issue-number -->\n"
+    assert gh.patch_data["body"] == "\n\n<!-- issue-number: bpo-32636 -->\nRef: bpo-32636\n<!-- /issue-number -->\n"
     bpo._validate_issue_number.assert_awaited_with("32636", session=None)
 
 
@@ -345,7 +345,7 @@ async def test_set_body_success(monkeypatch):
     gh = FakeGH()
     await bpo.router.dispatch(event, gh, session=None)
     status = gh.patch_data
-    assert "https://bugs.python.org/issue1234" in status["body"]
+    assert "Ref: bpo-1234" in status["body"]
     assert "1347" in gh.patch_url
     bpo._validate_issue_number.assert_awaited_with("1234", session=None)
 
@@ -360,7 +360,7 @@ async def test_set_body_failure(monkeypatch):
             "statuses_url": "https://api.github.com/blah/blah/git-sha",
             "url": "https://api.github.com/repos/blah/blah/pulls/1347",
             "title": "[3.6] bpo-1234: an issue!",
-            "body": """The body.\n<!-- issue-number: bpo-1234 -->\n"https://bugs.python.org/issue1234"\n<!-- /issue-number -->"""
+            "body": """The body.\n<!-- issue-number: bpo-1234 -->\n"Ref: bpo-1234"\n<!-- /issue-number -->"""
         },
     }
     event = sansio.Event(data, event="pull_request", delivery_id="12345")

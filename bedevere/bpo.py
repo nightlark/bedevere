@@ -13,7 +13,7 @@ BODY = f"""\
 {{body}}
 
 <!-- {TAG_NAME}: bpo-{{issue_number}} -->
-https://bugs.python.org/issue{{issue_number}}
+Ref: bpo-{{issue_number}}
 {CLOSING_TAG}
 """
 
